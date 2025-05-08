@@ -1,5 +1,7 @@
 import argparse
 import importlib.metadata
+from pathlib import Path
+import sys
 
 import vcd_tools
 
@@ -25,6 +27,29 @@ if __name__ == "__main__":
         ),
     )
 
+    # Action to perform:
+    parser.add_argument(
+        "-a", "--action", action="store", default="find_binary_pattern", help="action to perform: beat_counter, find_binary_pattern, etc"
+    )
+
+    # path to file
+    parser.add_argument(
+        "-f", "--file",
+        type=Path,
+        default=None,
+        help="Path to the iladata file directory",
+    )
+
     args = parser.parse_args()
 
-    solved = vcd_tools.vcd_tools_fun()
+    ifile = args.file
+    if ifile is None:
+        ifile = vcd_tools.file_selector()
+    if ifile.exists():
+        vcd_parse = vcd_tools.parse(ifile)
+    else:
+        print(f"VCD file {ifile} does not exist.")
+        sys.exit(1)
+
+    if "find_binary_pattern" in args.action:
+        vcd_tools.find_binary_pattern(vcd_parse)
