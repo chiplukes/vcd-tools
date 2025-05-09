@@ -32,6 +32,11 @@ if __name__ == "__main__":
         "-a", "--action", action="store", default="find_binary_pattern", help="action to perform: beat_counter, find_binary_pattern, etc"
     )
 
+    # binary pattern to search for:
+    parser.add_argument(
+        "-p", "--pattern", action="store", default=None, help="comma seperated list of binary patterns to search for.  Ie: 0011111010,1100000101"
+    )
+
     # path to file
     parser.add_argument(
         "-f", "--file",
@@ -52,4 +57,10 @@ if __name__ == "__main__":
         sys.exit(1)
 
     if "find_binary_pattern" in args.action:
-        vcd_tools.find_binary_pattern(vcd_parse)
+        if args.pattern is None:
+            print("Please input a binary search pattern.")
+            sys.exit(1)
+
+        pattern_lst = args.pattern.split(",")
+
+        vcd_tools.find_binary_pattern(vcd_parse,pattern_lst=pattern_lst)

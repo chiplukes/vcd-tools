@@ -102,7 +102,7 @@ def beat_counter(vcd):
     # assert(signal[2] == '0')
     # assert(signal[3] == '0')
 
-def find_binary_pattern(vcd,pattern=None):
+def find_binary_pattern(vcd,pattern_lst=None):
 
     # List all human readable signal names.
     chc_lst = []
@@ -120,9 +120,6 @@ def find_binary_pattern(vcd,pattern=None):
 
     num_sigs = len(sigs_lst)
 
-    print(num_sigs)
-    print(vcd)
-
     # last time value
     last_time = 0
     for trc in range(num_sigs):
@@ -132,31 +129,30 @@ def find_binary_pattern(vcd,pattern=None):
             else last_time
         )
 
-        #print(sigs_lst[trc])
         width = int(sigs_lst[trc].size,10)
-        width = 8
-        print(width)
-
-        print(type(sigs_lst[trc]))
-        print(f'Hunting for {pattern} in {sigs_lst[trc].references}')
-
+        print(f'Hunting for patterns {pattern_lst} in {sigs_lst[trc].references}')
         # create big binary string
-
         binstr_lst = []
+        binstr_reversed_lst = []
         for i in range(last_time):
             binstr = f"{int(sigs_lst[trc][i],2):0{width}b}"
-            #print(binstr)
             binstr_lst.append(binstr)
+            binstr_reversed_lst.append(binstr[::-1])
 
         binstr_full = "".join(binstr_lst)
+        binstr_reversed_full = "".join(binstr_reversed_lst)
 
-        if "0011111010" in binstr_full:
-            print("found")
+        for pattern in pattern_lst:
 
-        if "1100000101" in binstr_full:
-            print("found")
+            if pattern in binstr_full:
+                print(f"found {pattern}")
+                print(binstr_full.split(pattern))
+            if pattern in binstr_reversed_full:
+                print(f"found {pattern} when each vcd entry is bit reversed")
+                print(binstr_reversed_full.split(pattern))
 
         print(binstr_full)
+        print(binstr_reversed_full)
 
     return True
 

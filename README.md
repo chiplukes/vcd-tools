@@ -10,34 +10,40 @@ This is a simple project that can be used to start new python application.
 Install this application using `pip`:
 ```bash
 git clone git+https://github.com/chiplukes/vcd-tools
+cd vcd-tools
+python -m venv .venv
+source venv/bin/activate
+# install this python application + dependencies
+python -m pip install -e .
+
 ```
 
 ## Usage
 
-## Development
+### Help
 
-To use this application, first checkout the code. Then create a new virtual environment:
 ```bash
-cd vcd-tools
-python -m venv .venv
-source venv/bin/activate
+python main.py -h
 ```
 
-Now install the dependencies and test dependencies:
+### Example finding a binary sequence from vcd file.
+When run you are presented with a menu where you can mark () multiple signals from the vcd file
 ```bash
-python -m pip install -e .
-```
-
-Running main application
-```bash
+python main.py -a find_binary_pattern -p 0011111010,1100000101,0101111100,1010000011
 python -m vcd_tools
 ```
 
-To run the tests:
+
+### Example counting number of beats
+
+Can select multiple signals that are AND'ed together and counted as a beat.  This is typically used for AXI Stream transactions.
+
 ```bash
-pip install -e '.[test]'
-pytest
+python main.py -a count_beats
+python -m vcd_tools
 ```
+
+## Misc
 
 For using pre-commit hooks:
 ```bash
